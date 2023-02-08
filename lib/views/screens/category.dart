@@ -18,11 +18,13 @@ class CategoryScreen extends StatefulWidget {
 
 class _CategoryScreenState extends State<CategoryScreen> {
   late List<PhotosModel> categoryResults;
-
+bool isLoading  = true;
   GetCatRelWall() async {
     categoryResults = await ApiOperations.searchWallpapers(widget.catName);
 
-    setState(() {});
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -44,7 +46,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
           word2: "Guru",
         ),
       ),
-      body: SingleChildScrollView(
+      body: isLoading  ? Center(child: CircularProgressIndicator(),)  : SingleChildScrollView(
         child: Column(
           children: [
             Stack(

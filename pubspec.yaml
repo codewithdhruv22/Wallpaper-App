@@ -39,6 +39,7 @@ dependencies:
   http: any
   image_downloader: ^0.20.1
   get: any
+  open_file: ^3.2.1
 
 dev_dependencies:
   flutter_test:

@@ -16,11 +16,13 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   late List<PhotosModel> searchResults;
-
+  bool isLoading = true;
   GetSearchResults() async {
     searchResults = await ApiOperations.searchWallpapers(widget.query);
 
-    setState(() {});
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -43,13 +45,15 @@ class _SearchScreenState extends State<SearchScreen> {
           word2: "Guru",
         ),
       ),
-      body: SingleChildScrollView(
+      body: isLoading ? Center(child: CircularProgressIndicator(),)  : SingleChildScrollView(
         child: Column(
           children: [
             Container(
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 child: SearchBar()),
-                SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 10),
               height: MediaQuery.of(context).size.height,
@@ -63,16 +67,15 @@ class _SearchScreenState extends State<SearchScreen> {
                   itemCount: searchResults.length,
                   itemBuilder: ((context, index) => GridTile(
                         child: InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => FullScreen(
-                                          imgUrl:
-                                              searchResults[index].imgSrc)));
-                            },
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => FullScreen(
+                                        imgUrl: searchResults[index].imgSrc)));
+                          },
                           child: Hero(
-                            tag: searchResults[index].imgSrc ,
+                            tag: searchResults[index].imgSrc,
                             child: Container(
                               height: 800,
                               width: 50,

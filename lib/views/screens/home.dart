@@ -17,26 +17,30 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late List<PhotosModel> trendingWallList;
   late List<CategoryModel> CatModList;
+  bool isLoading = true;
 
-  GetCatDetails() {
-    CatModList = ApiOperations.getCategoriesList();
+  GetCatDetails() async {
+    CatModList = await ApiOperations.getCategoriesList();
     print("GETTTING CAT MOD LIST");
     print(CatModList);
-    setState(() {});
+    setState(() {
+      CatModList = CatModList;
+    });
   }
 
   GetTrendingWallpapers() async {
     trendingWallList = await ApiOperations.getTrendingWallpapers();
 
-    setState(() {});
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   void initState() {
     super.initState();
-
-    GetTrendingWallpapers();
     GetCatDetails();
+    GetTrendingWallpapers();
   }
 
   @override
@@ -52,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
           word2: "Guru",
         ),
       ),
-      body: SingleChildScrollView(
+      body:  isLoading ? Center(child: CircularProgressIndicator(),) : SingleChildScrollView(
         child: Column(
           children: [
             Container(
@@ -99,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               trendingWallList[index].imgSrc)));
                             },
                             child: Hero(
-                              tag:  trendingWallList[index].imgSrc,
+                              tag: trendingWallList[index].imgSrc,
                               child: Container(
                                 height: 800,
                                 width: 50,
